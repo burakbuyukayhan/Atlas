@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atlas AR Viewer</title>
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #1a1a2e; display: flex; flex-direction: column; align-items: center; min-height: 100vh; font-family: Arial, sans-serif; }
+        h1 { color: #4FC3F7; margin: 16px 0; font-size: 22px; }
+        model-viewer {
+            width: 100vw;
+            height: 78vh;
+            background-color: #1a1a2e;
+            --poster-color: #1a1a2e;
+        }
+        #ar-button {
+            background: #888;
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 28px;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 10px;
+            width: 90%;
+            max-width: 320px;
+            display: block;
+            transition: background 0.3s;
+        }
+        #ar-button.ready { background: #00C853; }
+        .info { color: #888; font-size: 13px; text-align: center; padding: 0 20px 16px; }
+    </style>
+</head>
+<body>
+    <h1>Atlas 3D Model</h1>
+
+    <model-viewer
+        id="viewer"
+        src="model.glb"
+        alt="Atlas 3D Model"
+        ar
+        ar-modes="scene-viewer webxr quick-look"
+        ar-scale="fixed"
+        min-camera-orbit="auto auto 1%"
+        max-camera-orbit="auto auto 100%"
+        camera-orbit="0deg 75deg 5m"
+        scale="0.001 0.001 0.001"
+        camera-controls
+        touch-action="pan-y"
+        auto-rotate
+        auto-rotate-delay="500"
+        rotation-per-second="15deg"
+        shadow-intensity="1"
+        exposure="1"
+        environment-image="neutral"
+        loading="eager">
+    </model-viewer>
+
+    <button id="ar-button" onclick="startAR()">⏳ Yükleniyor...</button>
+    <p class="info">Döndür • Zoom yap • AR için yeşil butona bas</p>
+
+    <script>
+        const viewer = document.getElementById('viewer');
+        const btn = document.getElementById('ar-button');
+
+        viewer.addEventListener('load', () => {
+            btn.textContent = '📱 AR\'da Görüntüle';
+            btn.classList.add('ready');
+        });
+
+        function startAR() {
+            if (viewer.canActivateAR) {
+                viewer.activateAR();
+            } else {
+                alert('Model henüz yükleniyor, yeşil olana kadar bekleyin.');
+            }
+        }
+    </script>
+</body>
+</html>
